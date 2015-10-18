@@ -1,9 +1,9 @@
 library(ggplot2)
 library(qualityTools)
 
-
 # create a vector of w exponential waiting times with lambda = lam
 set.seed(50)
+
 wait <- function(w,lam){
   a=NULL
   for(i in 1:w){
@@ -12,60 +12,70 @@ wait <- function(w,lam){
   return(a)
 }
 
-a<-wait(100,1)
-hist(a)
-b<-wait(1000,2)
+A<-wait(100,2)
+A
+hist(A)
+B<-wait(1000,2)
+B
 
 lambda=2
-L<-length(a)/100
-x<-seq(min(a),max(a),0.1)
+L<-length(A)/100
+x<-seq(min(A),max(A),0.1)
 y<-dexp(x,lambda)*L
-qplot(a,binwidth=0.1)+geom_line(aes(x,y,color="red"))
+qplot(A,binwidth=0.1)+geom_line(aes(x,y,color="red"))
 
 
 # create a vector of exponential waiting times which total t <= Max with lambda = lam
 
-set.seed(50)
 wait.until <- function(Max,lam){
-  # set.seed(50)
   time = 0
+  count=0
   a = NULL
-  while(time < Max){
+  while(count < Max){
+    inter=rexp(1,lam)
+    count=count+1
     a = c(a,inter)
     time = time + inter
   }
-  #return(a[1:(length(a)-1)]) ##test w seed ## haha use ()
-  return(c(a[1:(length(a)-1)],"time"=time-inter))
-
+  
+  return(time)
+  
 }
 
-wait.until(10,1)
+wait.until(1000,2)
 
 # now simulate the number of events to show that the number of events divided by
 # exponential waiting times are Poisson distributed
 # (don't forget to comment out the "set.seed")
 
-set.seed(50)
 wait.until<-function(Max,lam){
   time=0
   a=NULL
+  while(time<Max){
+    inter =rexp(1,lam)
+    a=c(a,inter)
+    time=time+inter
+  }
+  return(a[1:(length(a)-1)])
 }
 
+#Check
+wait.until(1000,2)
 
 poi.test <- function(rep, Max, lam){
-  time=rep
   a = NULL
   for(i in 1:rep){
     q = wait.until(Max,lam)
+    a=c(a,length(q))
   }
   return(a)
 }
 
-p1<-poi.test(1000,5,1)
-
+p1<-poi.test(1000,3,2)
+p1
 
 # now simlate the waiting time for k events to occur with lambda = lam
-set.seed(50)
+
 wait.for <- function(k, lam){
   time = 0
   count = 0
@@ -79,7 +89,7 @@ wait.for <- function(k, lam){
   return(time)
 } 
 
-wait.for(5,1)
+wait.for(1000,2)
 
 
 gam.test <-function(rep, max.e, lam ){
@@ -92,18 +102,7 @@ gam.test <-function(rep, max.e, lam ){
   
   return(a)
 }
-gam.test(100,2,1)
-  
-  
- #Check for gamma
-
-scale<-length(gam)/10
-lambda<-mean(gam)/var(gam)
-alpha<-mean(gam)^2/var(gam)
-x<-seq(min(gam),max(gam),0.1)
-y<-dgamma(x,alpha,rate-lambda)*scale
-qplot(gam,binwidth=0.1)+geom_line(aes(x,y,color='red'))
-  
+gam.test(1000,4,2)
 
 #gamma function, shape=n,rate=lam,scale=1/lam
 
@@ -114,7 +113,11 @@ gamma<-function(k,lam){
   }
   print(B)
 }
-  
-#Check by gamma
 
-C<-gamma(100,2)
+#Check
+
+gam.test(100,3,2)
+
+gam.test(1000,10,2)
+
+mean(gam.test(1000,10,2))
