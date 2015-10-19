@@ -1,9 +1,16 @@
 #Data Preparation
-
+library(plyr)
 #choose a variable, and i choose obesity from RISKFACTORSANDACCESSTOCARE
 set.seed(50)
 Risk<-read.csv("RISKFACTORSANDACCESSTOCARE.csv",header=T,stringsAsFactors=FALSE)
+attach(Risk)
 head(Risk)
+
+Risk[Risk=="-1111.1"] <- 0
+
+head(Risk)
+summary(Risk)
+
 obesity<-Risk[,c("Obesity")]
 head(obesity)
 obesity<-na.omit(obesity)
@@ -47,6 +54,4 @@ dim(obesity)
 obesityk<-kmeans(x=obesity,centers=5)
 obesityk
 
-  
-  
 
