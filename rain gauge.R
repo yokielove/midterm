@@ -89,7 +89,7 @@ rain2<-as.data.frame(sapply(rain1,as.numeric))
 rain3<-rain2[complete.cases(rain2),]
 rain4<-as.vector(t(rain3))
 
-#storm function
+#storm function Credit for Su Yang, Thank you!
 sum <- 0
 j=1
 tmp<-0
