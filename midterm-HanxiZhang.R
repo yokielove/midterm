@@ -121,3 +121,4 @@ gam.test(100,3,2)
 gam.test(1000,10,2)
 
 mean(gam.test(1000,10,2))
+
